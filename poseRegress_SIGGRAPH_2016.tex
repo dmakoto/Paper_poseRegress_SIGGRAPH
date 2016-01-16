@@ -1,4 +1,4 @@
-	%%% template.tex
+%%% template.tex
 %%%
 %%% This LaTeX source document can be used as the basis for your technical
 %%% paper or abstract. Intentionally stripped of annotation, the parameters
@@ -24,14 +24,16 @@
 \usepackage{amsfonts}
 \usepackage[]{algorithm2e}
 \usepackage{subcaption}
-	
+
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 %\title{RegressAR: Object Pose Perspective Learning based on Feature Points Local Information and Decision Forest Regression for Augmented Reality}
-\title{RegressAR: Object Pose for Augmented Reality Based on Feature Points Local Information and Regression Forest}
+\title{RegressAR: Learning Object Pose based on Feature Points Local Information for Augmented Reality}
 
 %\author{paper\_ XXXX}
+%\pdfauthor{paper_XXXX}
+
 
 \author{Daniel M. Tokunaga\thanks{e-mail:dmtokunaga@acm.org}\\Escola Polit\'{e}cnica da USP
 \and Munehiko Sato\thanks{e-mail:munehiko@acm.org}\\MIT Media Lab
@@ -39,8 +41,6 @@
 \and Ramesh Raskar\thanks{e-mail:raskar@media.mit.edu}\\MIT Media Lab
 \and Romero Tori\thanks{e-mail:tori@acm.org}\\Escola Polit\'{e}cnica da USP}
 \pdfauthor{Daniel M. Tokunaga}
-
-\pdfauthor{paper_XXXX}
 
 \keywords{Augmented Reality, Pose Estimation, Regression Forest}
 
@@ -55,8 +55,6 @@
    	\label{img:teaser}
  }
 
-
-
 \maketitle
 
 \begin{abstract}
@@ -64,6 +62,8 @@
 %Object pose estimation based on image information is one of key issues in augmented reality. However, conventional state-of-the-art non-iterative solve Perspective-$n$-Point approaches can be quite complex, once major solutions are based on the non-linear solvers. On the other hand, machine learning regression approaches have been applied for pose regression. Though, none of previous works achieved full pose. In this paper we propose RegressAR, a novel approach based on local information of feature points and decision forest regression, in order to fully estimate object poses. This machine learning based approach, yet simple, can provide comparable accuracy to state-of-the-art solutions. Also, for the global pose estimation of the object, we introduce a hybrid method between decision forest and RANSAC approach, named RF-RANSAC, in order to achieve better accuracy and performance. Although, we focus on planar objects pose estimation in this work, we show that our solution can be extended for other problems, such as 3D objects pose estimation. 
 
 In this paper we propose RegressAR, a novel approach, based on local poses of image feature points and decision forest regression, in order to fully estimate the object pose. By applying regression training over scale and rotation invariant feature points appearances, we obtain estimations of the local rotations. These local rotations are, then, projected to global object information in order to find the full pose. Unlike other works of pose regression by machine learning presented in the literature, we are the very first to fully achieve, by machine learning, image feature points local rotation; and full 6 degrees-of-freedom object pose. This solution also avoids complex non-linear solvers, applied in several state-of-the-art non-iterative solve Perspective-$n$-Point approaches. We show that this machine learning based approach, yet simple, can provide comparable accuracy to state-of-the-art solutions.    
+%
+%In this paper we propose a novel approach for rigid pose estimation based on local image features as part of a learning system. We train a random forest over multiple scales and rotations obtaining a local signature invariant to such deformations, from which we infer the global pose. Comparing to other systems we do not need to solve complex non-linear systems, replacing that with a fast and robust approach showing comparable results and dramatically lower real-time calculation demands.
 
 \end{abstract}
 
@@ -97,11 +97,12 @@ On the other hand, works such as presented by Fenzi et al. \cite{Fenzi:2013}, ex
 %% take off RF-RNASAC-> already applied in Brachmann works -> different-> but... -> so RegressAR is all now. No RF-RANSAC.  
 %In this work, we address this full object pose estimation with our novel full pose estimation approach, named RegressAR, which applies regression forest \cite{Criminisi:Book} over the feature points appearance changes, in order to locally learn the perspective changes. Additionally, we introduce a novel hybrid method between regression forest and RANSAC approaches \cite{Fischler:1981}, named RF-RANSAC, to reach the object pose by this approach. In this method, we explore the prior information of the scene in order to refine the regression value returned by the regression forest. Here, we focus on planar object pose estimation, evaluating our method in comparison to state-of-art P-$n$-P method. Yet, we also show that our methods could be extended to 3D rigid object at the section \ref{subsec:results:other}.   
 
-In this work, we address this full object pose estimation with our novel full pose estimation approach, named RegressAR, which applies regression forest \cite{Criminisi:Book} over the feature points appearance changes, in order to locally learn the perspective changes. This regression can provide us local rotations of each feature point, rich information that can be used in several conditions, such as in deformation estimation \cite{Tokunaga:2015, Rendl:2014}; that are not explored in conventional pose estimation works. 
+In this work, we address this full object pose estimation with our novel full pose estimation approach, named RegressAR, which applies regression forest \cite{Criminisi:Book} over the feature points appearance changes, in order to locally learn the perspective changes. This regression can provide us local rotations of each feature point, rich information that can be used in several conditions, such as in deformation estimation \cite{Tokunaga:2015,Rendl:2014}; that are not explored in conventional pose estimation works. 
 
-Then, we explore the prior information of the scene in order to refine the regression value returned by the regression forest combined with RANSAC method. Here, we focus on planar object pose estimation, evaluating our method in comparison to state-of-art P-$n$-P method. Yet, we also show that our methods could be extended to 3D rigid object or deformable objects, at the section \ref{subsec:results:other}.   
+After that, we explore the prior information of the scene in order to refine the regression value returned by the regression forest combined with RANSAC method. Here, we focus on planar object pose estimation, evaluating our method in comparison to state-of-art P-$n$-P method. Yet, we also show that our methods could be extended to 3D rigid object or deformable objects, at the section \ref{subsec:results:other}.   
 
-Our main contribution in this work is our RegressAR approach itself, which can be a simple, yet accurate, alternative for AR systems. For the best of our knowledge, we are the very first to address this full pose of the object based on feature points local poses and machine learning approach; unlike previous works that estimate only few degrees-of-freedom or are based only on points position information, not exploring the local poses.  
+Our main contribution in this work is our RegressAR approach itself, which can be a simple, yet accurate, alternative for AR systems. For the best of our knowledge, we are the very first to address this full pose of the object based on feature points local poses and machine learning approach. Thus, not needing to solve complex non-linear systems, replacing that with a fast and robust approach showing comparable results and dramatically lower real-time calculation demands.
+%; unlike previous works that estimate only few degrees-of-freedom or are based only on points position information, not exploring the local poses.  
 %The RF-RANSAC method is also another key contribution of this work.
 
 In the next section we will present related works for object pose estimation. In section \ref{sec:poseMethod}, we present our RegressAR approach itself. Our obtained results are presented in section \ref{sec:results}, as well as its evaluation, in \ref{subsec:results:evaluation}, and extensions, \ref{subsec:results:other}. Finally we discuss our approach and its results in section \ref{sec:discussion}; and show our conclusion and future works in \ref{sec:conclusion}.
@@ -119,11 +120,11 @@ Works such as \cite{Lepetit:2009,Li:2012} approach the solve P-$n$-P by nonitera
 %% RGB-D based -> good results 6DoF and also local, similar to us Brachmann->RANSAC+RF (specially shotton:2013, Brachmann, Krull, and tajen?2015) -> rely on depth
 %% our works is the only with continuous (not discrete as somes) 6DoF + Local rotation. -> Fenzi:2015 similar to Fenzi:2013 approach + Brachmann:2014; + Pepik:2012; + Similar to Changchang . Also to Tokunaga:2015 local poses -> rely on RGB-D cameras too. 
 
-On the other hand, machine learning based approaches has become largely explored in pose estimation of known objects. Those approaches has the advantage of avoiding complex non-linear solving problems. Murase and Nayar \shortcite{Murase:1993} apply a eigen space analysis in order to learn the object poses and illumination changing. Then, works such as \cite{Lepetit:2009,Pepik:2012,Gu:2010} also applied machine learning for training the object pose across its appearances. 
+On the other hand, machine learning based approaches had become largely explored in pose estimation of known objects. Those approaches have the advantage of avoiding complex non-linear solving problems. Murase and Nayar \shortcite{Murase:1993} apply an eigen space analysis in order to learn the object poses and illumination changing. Then, works such as \cite{Lepetit:2009,Pepik:2012,Gu:2010} also applied machine learning for training the object pose across its appearances. However, such works inherently deal with discretized views. 
 
-However, such works inherently deal with discretized views. On the other hand, \cite{Torki:2011,He:2014,Hara:2014,Shimizu:2014,Zhen:2015} learn the object appearance changes across views in order to obtain continuous pose. Though, such approaches do not achieve full 6 DoF pose, neither the local pose of the feature points. Specially HoG features based works can not directly returns full pose, once HoG features are not directly scale and rotation invariant.            
+\cite{Torki:2011,He:2014,Hara:2014,Shimizu:2014,Zhen:2015} learn the object appearance across views in order to obtain continuous pose. Though, such approaches do not achieve full 6 DoF pose, neither the local pose of the feature points.%Specially HoG features based works can not directly returns full pose, once HoG features are not directly scale and rotation invariant.            
 	
-Also, despite based on depth and image information (RGB-D), works such as \cite{Shotton:2013,Brachmann:2014,Tejani:2014} also apply machine learning for full object pose estimation. In special, \cite{Tejani:2014} is similar to our approach, once they train the local pose of the object, for each pixel. Also, all of those works apply random forest for pose estimation, as our approach.  
+Besides that, works such as \cite{Shotton:2013,Brachmann:2014,Tejani:2014} also apply machine learning for full object pose estimation, despite based on depth and image information (RGB-D). In special, \cite{Tejani:2014} is similar to our approach, once authors train the local pose of the object, for each pixel. Also, all of those works apply random forest for pose estimation, as in our approach.  
 
 Partial local information of pose also can be estimated in \cite{Fenzi:2013}, which apply regression based only on the feature points local appearance, and \cite{Pepik:2012}, which apply deformable part model with HoG features. However, none of the works based on machine learning presented here achieve full 6 DoF object pose, nor local rotation. Although some works propose that full rotation can be achieved by simply extending its method; this extension is not easy, due to similarities in appearance of feature points such as presented in \ref{img:diffL2}, specially to feature points that does not have rotation invariance. 
 
@@ -137,7 +138,7 @@ Partial local information of pose also can be estimated in \cite{Fenzi:2013}, wh
 \caption{top view}
 \label{img:diffL2:top}
 \end{subfigure}%
-\caption{L2 distances between feature points views with fixed $\theta$, varying $\phi$ and $\psi$ of the camera. $0$ valued distance is the reference view. It is possible to observe the similarity that appear all across different $\psi$, making the extension of 2DoF rotation regression (fixed $\psi$) to 3DoF rotation problem not easy.}
+\caption{L2 distances between feature points views with fixed $\theta$, and varying $\phi$, $\psi$ values of camera. $0$ valued distance in the graph is the reference view. It is possible to observe the similarity which appears all across different $\psi$ and $\phi$, making the extension of 2DoF rotation regression (fixed $\psi$) to 3DoF rotation non-trivial.}
 \label{img:diffL2}
 \end{figure}
 
@@ -161,8 +162,6 @@ Our RF-RANSAC method (section \ref{subsec:poseMethod:rfRANSAC}) is also similar 
 \section{Pose Estimation Method}
 \label{sec:poseMethod}
 
-
-% img info flow put this first of all?
 \begin{figure*}[t]
 \includegraphics[width =\textwidth]{images/infoFlow.png}
 \caption{Information flow of our approach.}
@@ -172,16 +171,14 @@ Our RF-RANSAC method (section \ref{subsec:poseMethod:rfRANSAC}) is also similar 
 	
 %% talk about similarities with other works across here also?
 
-In this section we present our RegressAR approach for object pose estimation. The main idea behind our approach is to explore machine learning methods to learn the perspective changes based on appearance changes around detected features in order to estimate the object pose. First, in order to achieve our pose estimation, we consider three different Euclidian coordinate spaces. The image space $I$, which are the two-dimensional space of captured images; also world coordinates $w$, the three-dimensional space of the scene where object pose needs to be calculated. At last, pre-captured  information about the object are hold in $o$, the three-dimensional coordinate space of the original planar object model. 
+In this section we present our RegressAR approach for object pose estimation. The main idea behind our approach is to explore machine learning methods to learn the perspective changes based on appearance changes around detected features in order to estimate the object pose. First, in order to achieve our pose estimation, we consider three different Euclidian coordinate spaces. The image space $I$, which are the two-dimensional space of captured images; and world coordinates $w$, the three-dimensional space of the scene where object pose needs to be calculated. At last, pre-captured  information about the object are hold in $o$, the three-dimensional coordinate space of the original planar object model. 
 
 From this point of this work, we denote that variables with a uppercase $I$, such as $x^I$, denotes that are in image space; variables with $o$, the original coordinates of the captured object; and $w$, the new scene world coordinate. Also, points with upper case $H$ denotes the homogeneous coordinates of the projected point, i.e., $\mathbf{p}^H = \mathbf{p}^w/z = [x/z, y/z, 1]^\top$. 
 
-For perspectives changes training, we assume that the object is locally rigid and planar around the feature points. This assumption is always true for planar objects, but also could be extended for different types of object, such as 3D rigid objects or locally rigid deformable objects, making our approach for these type of object as same as planar objects. Also, we assume that object surface texture $I_{tex}$, as well as, that the camera projection matrix $\mathbf{K}_{cam}$ are known. 
-
+For perspectives changes training, we assume that the object is locally rigid and planar around the feature points. This assumption is always true for planar objects, but also could be extended for different types of object, such as 3D rigid objects \cite{Lepetit:2005} or locally rigid deformable objects, making our approach for these type of object as same as planar objects. Also, we assume that object surface texture $I_{tex}$, as well as, that the camera projection matrix $\mathbf{K}_{cam}$ are known. 
 %Moreover, we consider that the unfolding model of the object surface to a planar surface is known. This unfolding model is composed by the function that maps any transformation in the object space to the unfolded texture space, $f_u(T^o) = T^t$; and its inverse $f_u^{-1} = f_f(T^t) = T^o$, that maps any transformation in texture space to original space, are known. This functions are similar to UV mapping algorithms \cite{}, or unfolding methods such as \cite{}. With these functions, we can unfold the object texture to a plane and process all the feature points in the model as a planar object.     
 
-Another assumption that we adopt is that the $\theta$ and $\phi$ values of the camera are independent for the deformation of the projected surface to the image. This means that we can estimate each value independently of the other, as in \cite{Fenzi:2013}. Finally, we assume that the set of rotation and scale invariant feature points $P^f = \{ p^f_0, \ldots, p^f_n \}$, such as SIFT \cite{Lowe:1999} or SURF \cite{Bay:2008}, spread across the object surface texture are known. Each feature point $p^f_i$ contains a set of information $p^f_i = \{ \mathbf{p}^o_i, \mathbf{o}^o_i, dsc_i \}$, where, $\mathbf{p}^o_i$ is the position of the point and $\mathbf{o}^o_i$, the orientation vector, both in the original object space; and $dsc_i$, the feature point descriptor. 
-
+Another assumption is that the $\theta$ and $\phi$ values of the camera are independent for the deformation of the projected surface to the image. This means that we can estimate each value independently of the other, as in \cite{Fenzi:2013}. Finally, we assume that the set of rotation and scale invariant feature points $P^f = \{ p^f_0, \ldots, p^f_n \}$, such as SIFT \cite{Lowe:1999} or SURF \cite{Bay:2008}, spread across the object surface texture are known. Each feature point $p^f_i$ contains a set of information $p^f_i = \{ \mathbf{p}^o_i, \mathbf{o}^o_i, dsc_i \}$, where, $\mathbf{p}^o_i$ is the position of the point and $\mathbf{o}^o_i$, the orientation vector, both in the original object space; and $dsc_i$, the feature point descriptor. 
 
 Our camera model is similar to ASIFT work \cite{Morel:2009}, which can produce all the affine transformations for a planar object as presented by authors. Figure \ref{img:cameraModel} presents our applied camera model. Note that $\psi$ rotation is related to image space rotation. Furthermore, once feature points that we are applying for our method are rotation invariant \cite{Bay:2008}, our training data can be $\psi$ invariant, needing to train only $\theta$ and $\phi$ values per feature point deformations. At subsection \ref{subsec:poseMethod:rotMat}, we show more details how to proceed this $\psi$-invariant training.   
 
@@ -675,7 +672,7 @@ Although we focused on rigid planar objects in this work, our approach could be 
 \label{img:ext:3d}
 \end{figure}
 
-More over, by finding the local rotation of each feature points, its information could be used in order to pose estimate deformable objects, that are locally rigid as in \cite{} and \cite{}. The local rotation results are shown in figure \ref{img:ext:deform}. In this figure, the local rotations are calculated by conventional decision forest approach, equation \eqref{eq:conventionalRF}, of the regressed values from all the trees of all the found feature points.  
+More over, by finding the local rotation of each feature points, its information could be used in order to pose estimate deformable objects, that are locally rigid as in \cite{Tokunaga:2015}. The local rotation results are shown in figure \ref{img:ext:deform}. In this figure, the local rotations are calculated by conventional decision forest approach, equation \eqref{eq:conventionalRF}, of the regressed values from all the trees of all the found feature points.  
 
 \begin{figure}[h]
 \center
@@ -749,11 +746,11 @@ This improvement in the per feature point regression accuracy, can lead to poses
 
 %RF-RANSAC method itself could also be applied in several other problems, such as presented in section \ref{sec:discussion}, in order to explore the prior information of observed scene. Finally, our RegressAR approach of pose estimation based on machine learning presents a novel alternative approach for pose estimation for augmented reality systems. This approach is based on a simple yet novel idea of learning perspective changes of the object in different poses. We show that our results has comparable accuracy to state-of-art solve P-$n$-P methods, and some times better than these methods.   
 
-Finally, our RegressAR approach of pose estimation based on machine learning presents a novel alternative approach for pose estimation for augmented reality systems. This approach is based on a simple yet novel idea of learning perspective changes of the object in different poses. We show that our results has comparable accuracy to state-of-art solve P-$n$-P methods, and some times better than these methods.  
+Finally, our RegressAR approach of pose estimation based on machine learning presents a novel alternative approach for pose estimation for augmented reality systems. This approach is based on a simple yet novel idea of learning perspective changes of the object in different poses, replacing the complex non-linear systems solving problem to a learning regression problem. We show that our results has comparable accuracy to state-of-art solve P-$n$-P methods, and some times better than these methods.  
 
-\section*{Acknowledgements}
-Authors like to thanks CAPES and Ci\^{e}ncias sem Fronteiras (process number ) for scholarship. 
+%\section*{Acknowledgements}
+%Authors like to thanks CAPES and Ci\^{e}ncias sem Fronteiras (process number 237913/2012-7) for scholarship. 
 
 \bibliographystyle{acmsiggraph}
-\bibliography{template}
+\bibliography{templateBib}
 \end{document}
